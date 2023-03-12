@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: 01-create-categories-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 02-create-books-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 03-create-authors-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: 04-create-books-authors-table.yml
+      relativeToChangelogFile: true

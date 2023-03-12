@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - preConditions:
+      - onFail: WARN
+      - not:
+          - tableExists:
+              tableName: categories
+  - changeSet:
+      id: 01-create-categories-table
+      author: sergey.ovodkov
+      changes:
+        - createTable:
+            tableName: categories
+            remarks: 'Категории книги'
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_categories
+                  remarks: 'Идентификатор категории в системе'
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                  remarks: 'Название категории'
+              - column:
+                  name: description
+                  type: varchar(2000)
+                  remarks: 'Описание смысла данной категории книг'
+              - column:
+                  name: parent_id
+                  type: bigint
+                  remarks: 'Идентификатор родительской категории'
+        - addForeignKeyConstraint:
+            baseColumnNames: parent_id
+            baseTableName: categories
+            constraintName: fk_parent_category
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: categories

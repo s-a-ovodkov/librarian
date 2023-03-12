@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - preConditions:
+      - onFail: WARN
+      - not:
+          - tableExists:
+              tableName: books_authors
+  - changeSet:
+      id: 04-create-books-authors-table
+      author: sergey.ovodkov
+      changes:
+        - createTable:
+            tableName: books_authors
+            remarks: 'Таблица связи авторов и книг'
+            columns:
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                  remarks: 'Идентификатор книги'
+              - column:
+                  name: author_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                  remarks: 'Идентификатор автора'
+        - addPrimaryKey:
+            columnNames: book_id, author_id
+            constraintName: pk_books_authors
+            tableName: books_authors
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: book_id
+            baseTableName: books_authors
+            constraintName: fk_book_authors
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: books
+        - addForeignKeyConstraint:
+            baseColumnNames: author_id
+            baseTableName: books_authors
+            constraintName: fk_books_author
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: authors
