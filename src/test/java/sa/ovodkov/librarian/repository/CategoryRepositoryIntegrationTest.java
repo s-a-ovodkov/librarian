@@ -1,35 +1,31 @@
 package sa.ovodkov.librarian.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import com.github.database.rider.core.api.configuration.DBUnit;
+import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import sa.ovodkov.librarian.AbstractIntegrationTest;
 import sa.ovodkov.librarian.entity.Category;
 
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DBRider
-@DataJpaTest
+@DBUnit(caseInsensitiveStrategy = Orthography.LOWERCASE)
 @DisplayName("Интеграционное тестирование методов репозитория работы с категориями книг")
-class CategoryRepositoryIntegrationTest {
+class CategoryRepositoryIntegrationTest extends AbstractIntegrationTest {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+  @Autowired private CategoryRepository categoryRepository;
 
-    @Test
-    @DataSet("datasets/categories/categories.yml")
-    @DisplayName("Проверка получения списка корневых категорий")
-    void findByParentCategoryIsNull() {
+  @Test
+  @DataSet("datasets/categories/categories.yml")
+  @DisplayName("Проверка получения списка корневых категорий")
+  void findByParentCategoryIsNull() {
+    List<Category> result = categoryRepository.findByParentCategoryIsNull();
 
-        List<Category> result = categoryRepository.findByParentCategoryIsNull();
-
-        assertThat(result).isNotNull()
-            .hasSize(2)
-            .extracting(Category::getId)
-            .containsOnly(1L, 2L);
-    }
+    assertThat(result).isNotNull().hasSize(2).extracting(Category::getId).containsOnly(1L, 2L);
+  }
 }
