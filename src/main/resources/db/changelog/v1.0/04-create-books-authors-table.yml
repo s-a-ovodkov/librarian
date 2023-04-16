@@ -1,12 +1,12 @@
 databaseChangeLog:
-  - preConditions:
-      - onFail: WARN
-      - not:
-          - tableExists:
-              tableName: books_authors
   - changeSet:
       id: 04-create-books-authors-table
       author: sergey.ovodkov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: books_authors
       changes:
         - createTable:
             tableName: books_authors

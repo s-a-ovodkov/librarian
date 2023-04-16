@@ -1,12 +1,12 @@
 databaseChangeLog:
-  - preConditions:
-      - onFail: WARN
-      - not:
-          - tableExists:
-              tableName: categories
   - changeSet:
       id: 01-create-categories-table
       author: sergey.ovodkov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: categories
       changes:
         - createTable:
             tableName: categories
