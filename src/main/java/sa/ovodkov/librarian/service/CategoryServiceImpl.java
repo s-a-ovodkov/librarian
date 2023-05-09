@@ -2,8 +2,9 @@ package sa.ovodkov.librarian.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sa.ovodkov.librarian.dto.CategoryRequest;
+import sa.ovodkov.librarian.dto.CategoryResponse;
 import sa.ovodkov.librarian.entity.Category;
-import sa.ovodkov.librarian.modelview.CategoryView;
 import sa.ovodkov.librarian.repository.CategoryRepository;
 
 import java.util.List;
@@ -17,18 +18,24 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> getRootCategory() {
+    public List<CategoryResponse> getRootCategories() {
         return categoryRepository.findByParentCategoryIsNull();
     }
 
     @Override
-    public void addCategory(CategoryView category) {
+    public List<CategoryResponse> getSubCategories(Long parentCategoryId) {
+        return categoryRepository.findByChildren(parentCategoryId);
+    }
+
+    @Override
+    public void addCategory(CategoryRequest category) {
         Category newCategory = Category.builder()
-            .name(category.getName())
-            .description(category.getDescription())
+            .name(category.name())
+            .description(category.description())
             .build();
-        if (category.getParentId() != null) {
-            categoryRepository.findById(category.getParentId()).ifPresent(newCategory::setParentCategory);
+        if (category.parentId() != null) {
+            categoryRepository.findById(category.parentId()).ifPresent(newCategory::setParentCategory);
         }
+        categoryRepository.save(newCategory);
     }
 }

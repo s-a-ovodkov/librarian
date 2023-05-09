@@ -6,3 +6,12 @@ categories:
   - id: 3
     name: 'Детективы'
     parent_id: 1
+  - id: 4
+    name: "Фантастика"
+    parent_id: 1
+  - id: 5
+    name: 'Математика'
+    parent_id: 2
+  - id: 6
+    name: 'Дифференциальные уравнения'
+    parent_id: 5
