@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03-create-authors-table
+      author: sergey.ovodkov
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: authors
+      changes:
+        - createTable:
+            tableName: authors
+            remarks: 'Авторы книг'
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_authors
+              - column:
+                  name: first_name
+                  type: varchar(250)
+                  remarks: 'Имя автора'
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(250)
+                  remarks: 'Фамилия автора'
